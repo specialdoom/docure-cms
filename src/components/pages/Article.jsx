@@ -1,10 +1,20 @@
+import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Form, FormGroup, Input, Notification } from 'rsuite';
+import {
+  Form,
+  FormGroup,
+  Input,
+  Notification,
+  SelectPicker,
+  Divider
+} from 'rsuite';
 import { FlexboxGrid } from 'rsuite';
 import FlexboxGridItem from 'rsuite/lib/FlexboxGrid/FlexboxGridItem';
 import { ArticleService } from '../../services/ArticleService';
+import { WorkflowService } from '../../services/WorkflowService';
 
 const articleService = new ArticleService();
+const workflowService = new WorkflowService();
 
 const Article = () => {
   const { control, handleSubmit, watch, reset } = useForm({
@@ -14,9 +24,23 @@ const Article = () => {
       title: '',
       description: '',
       content: '',
-      author: ''
+      author: '',
+      workflowId: ''
     }
   });
+
+  const [workflows, setWorkflows] = useState([{ label: '1', value: '1' }]);
+
+  useEffect(() => {
+    workflowService.getAll().then((data) =>
+      setWorkflows(
+        data.workflows.map((item) => ({
+          label: item.title,
+          value: item.id
+        }))
+      )
+    );
+  }, [setWorkflows]);
 
   const submit = (data) => {
     articleService
@@ -36,6 +60,7 @@ const Article = () => {
         });
       });
   };
+
   return (
     <FlexboxGrid>
       <FlexboxGridItem colspan={6}>
@@ -81,19 +106,36 @@ const Article = () => {
               )}
             />
           </FormGroup>
+          <FormGroup>
+            <Controller
+              name='workflowId'
+              control={control}
+              render={({ field: { onChange } }) => (
+                <SelectPicker
+                  onChange={onChange}
+                  data={workflows}
+                  style={{ width: 224 }}
+                />
+              )}
+            />
+          </FormGroup>
           <docure-button primary onClick={handleSubmit(submit)}>
             Submit
           </docure-button>
         </Form>
       </FlexboxGridItem>
       <FlexboxGridItem colspan={18}>
-        {watch('title')}
-        {watch('description')}
-        <div
-          dangerouslySetInnerHTML={{
-            __html: watch('content')
-          }}
-        ></div>
+        <Divider>Article card</Divider>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <docure-article-card>
+            <span slot='title'>{watch('title')}</span>
+            <span slot='description'>{watch('description')}</span>
+          </docure-article-card>
+        </div>
+        <Divider>Article</Divider>
+        <docure-article title={watch('title')} workflow={watch('workflowId')}>
+          <div>{watch('content')}</div>
+        </docure-article>
       </FlexboxGridItem>
     </FlexboxGrid>
   );

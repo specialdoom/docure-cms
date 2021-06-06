@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil';
 import { roles, userState } from '../store';
 import { ContentHandler } from './ContentHandler';
 import { Header } from './layout/Header';
-import { Home, Articles, User, Article } from './pages';
+import { Home, Articles, User, Article, Workflows } from './pages';
 import { NotAuth } from './pages/NotAuth';
 
 export const LoadedApp = () => {
@@ -25,6 +25,14 @@ export const LoadedApp = () => {
         <Route path='/articles'>
           <ContentHandler display={user.uid}>
             <Articles />
+          </ContentHandler>
+          <ContentHandler display={!user.uid}>
+            <NotAuth />
+          </ContentHandler>
+        </Route>
+        <Route path='/workflows'>
+          <ContentHandler display={user.uid}>
+            <Workflows />
           </ContentHandler>
           <ContentHandler display={!user.uid}>
             <NotAuth />

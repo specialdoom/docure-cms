@@ -18,6 +18,11 @@ export const Header = () => {
           <Link to='/articles'>Articles</Link>
         </docure-header-item>
       </ContentHandler>
+      <ContentHandler display={userRoles.isEditor || userRoles.isAdmin}>
+        <docure-header-item>
+          <Link to='/workflows'>Workflows</Link>
+        </docure-header-item>
+      </ContentHandler>
       <ContentHandler display={userRoles.isAdmin}>
         <docure-header-item>
           <Link to='/users'>Users</Link>

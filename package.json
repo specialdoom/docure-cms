@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@specialdoom/docure-article": "0.0.4",
+    "@specialdoom/docure-article-card": "0.0.1",
     "@specialdoom/docure-button": "0.0.2",
     "@specialdoom/docure-header": "0.0.2",
     "@specialdoom/docure-icon": "0.0.1",

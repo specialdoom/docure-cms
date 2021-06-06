@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Table } from 'rsuite';
+import { Table, Notification } from 'rsuite';
 import { ArticleService } from '../../services/ArticleService';
 
 const articleService = new ArticleService();
@@ -11,6 +11,10 @@ const Articles = () => {
   const history = useHistory();
 
   useEffect(() => {
+    getArticles();
+  }, []);
+
+  const getArticles = () => {
     articleService
       .getAll()
       .then((data) => {
@@ -21,10 +25,25 @@ const Articles = () => {
         setArticles([]);
         setIsLoading(false);
       });
-  }, [setArticles]);
+  };
 
   const addArticle = () => {
     history.push('/article');
+  };
+
+  const remove = (articleId) => {
+    articleService
+      .remove(articleId)
+      .then(() => {
+        Notification.success({
+          title: 'Success',
+          description: 'Article was removed successfully!'
+        });
+        getArticles();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   return (
@@ -49,6 +68,16 @@ const Articles = () => {
               const date = new Date(rowData.date);
               return date.toLocaleString('en-GB');
             }}
+          </Table.Cell>
+        </Table.Column>
+        <Table.Column flexGrow={1}>
+          <Table.HeaderCell>Actions</Table.HeaderCell>
+          <Table.Cell>
+            {(rowData) => (
+              <docure-button secondary onClick={() => remove(rowData.id)}>
+                Delete
+              </docure-button>
+            )}
           </Table.Cell>
         </Table.Column>
       </Table>

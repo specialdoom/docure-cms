@@ -11,6 +11,8 @@ import '@specialdoom/docure-button';
 import '@specialdoom/docure-header';
 import '@specialdoom/docure-icon';
 import '@specialdoom/docure-list';
+import '@specialdoom/docure-article-card';
+import '@specialdoom/docure-article';
 import { RecoilRoot } from 'recoil';
 
 ReactDOM.render(
