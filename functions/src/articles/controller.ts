@@ -7,9 +7,7 @@ const database = admin.database();
 export async function add(req: Request, res: Response) {
   const { title, description, content, author, workflowId } = req.body;
 
-  console.log(req.body);
-
-  if (!title || !description || !content || !author || !workflowId) {
+  if (!title || !description || !content || !author) {
     return res.status(400).send({ message: 'No enough details.' })
   }
 

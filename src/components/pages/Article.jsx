@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
 import {
   Form,
   FormGroup,
@@ -17,7 +18,7 @@ const articleService = new ArticleService();
 const workflowService = new WorkflowService();
 
 const Article = () => {
-  const { control, handleSubmit, watch, reset } = useForm({
+  const { control, handleSubmit, watch } = useForm({
     mode: 'all',
     criteriaMode: 'all',
     defaultValues: {
@@ -28,6 +29,8 @@ const Article = () => {
       workflowId: ''
     }
   });
+
+  const history = useHistory();
 
   const [workflows, setWorkflows] = useState([{ label: '1', value: '1' }]);
 
@@ -50,7 +53,7 @@ const Article = () => {
           title: 'Success',
           description: 'Article was added successfully!'
         });
-        reset();
+        history.push('/articles');
       })
       .catch(() => {
         Notification.error({
